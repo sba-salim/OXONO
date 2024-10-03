@@ -1,6 +1,7 @@
 package g60283.dev.ascii.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Drawing {
@@ -42,6 +43,10 @@ public class Drawing {
     }
     public int getWidth() {
         return width;
+    }
+
+    public List<Shape> getShapes() {
+        return Collections.unmodifiableList(shapes);
     }
 
     public int getHeight() {

@@ -12,6 +12,8 @@ public class View {
         }
     }
     public void list(AsciiPaint paint) {
-
+        for (int i = 0; i < paint.getShapes().size(); i++) {
+            System.out.println(i+". " +paint.getShapes().get(i).getClass().getSimpleName());
+        }
     }
 }

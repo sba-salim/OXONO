@@ -87,13 +87,9 @@ public class AsciiController {
 
     private void handleList() {
         System.out.println("Liste des formes :");
-        for (int i = 0; i < paint.getWidth(); i++) {
-            char color = paint.getColorAt(i, 0);
-            if (color != ' ') {
-                System.out.println("Forme à l'index " + i + " avec couleur " + color);
-            }
-        }
+        view.list(paint);
     }
+
 
     private void handleMoveShape(String input) {
         Pattern pattern = Pattern.compile("move (\\d+) (\\d+) (\\d+)");

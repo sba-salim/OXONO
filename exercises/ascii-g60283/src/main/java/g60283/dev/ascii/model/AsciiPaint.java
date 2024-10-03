@@ -1,5 +1,7 @@
 package g60283.dev.ascii.model;
 
+import java.util.List;
+
 public class AsciiPaint {
     private Drawing drawing;
 
@@ -50,6 +52,9 @@ public class AsciiPaint {
     }
     public void removeShape(int index) {
         drawing.remove(index);
+    }
+    public List<Shape> getShapes() {
+        return drawing.getShapes();
     }
 
 }
