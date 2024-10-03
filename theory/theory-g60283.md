@@ -404,4 +404,10 @@ J'ai une erreur peut être que je n'ai pas bien remis le code à son état d'ori
 
 1. matricule de l'école "g/d{5}"
 2. "(g\d{5}\s){5}"
-3. "Bonjour([A-Z]|[a-z]|[\]|[\d])*merci."
+3. "Bonjour.*merci."
+4. "add\scircle\s((\d)+\s){3}\w"
+5. /"move\s(\d)+\s((-)?(\d)+\s?){2}"
+
+#### Question 2
+
+Le group zero contient la date en complète.
