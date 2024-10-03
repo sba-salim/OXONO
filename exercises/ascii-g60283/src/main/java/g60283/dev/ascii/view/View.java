@@ -11,4 +11,7 @@ public class View {
             System.out.println();
         }
     }
+    public void list(AsciiPaint paint) {
+
+    }
 }
