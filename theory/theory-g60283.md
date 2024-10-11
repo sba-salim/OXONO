@@ -411,3 +411,51 @@ J'ai une erreur peut être que je n'ai pas bien remis le code à son état d'ori
 #### Question 2
 
 Le group zero contient la date en complète.
+
+## Generics
+
+#### Question 1
+
+1. 
+'setElement(java.lang.Integer)' in 'esi.generics.Box' cannot be applied to '(java.lang.Double)'
+ILe compilateur considére que la méthode setElement ne peut recervoir que des Integer (dans ce cas là), car la Box a été initialisée comme une box d'Integer
+
+2. Le compilateur précise qu'il n'est pas nécessaire de déclarer le type que la box va prendre explicitement, cela est dû au fait qu'on ajoute directement un élément dans la box, le compilateur peut donc interpréter directement le type de l'élément. 
+**Remarque** : Depuis java 9, Le constructeur Integer(int) ne peut plus être utilisé en java
+
+#### Question 2
+
+Non, cela est du au fait que Box<Integer> n'hérite pas de Box<Object>
+
+#### Question 3
+
+1. 
+java: incompatible types: esi.generics.Box<java.lang.Integer> cannot be converted to esi.generics.Box<java.lang.Object>
+(cf question 2).
+
+2. 'setElement(java.lang.Integer)' in 'esi.generics.Box' cannot be applied to '(double)'
+   Car on ne peut pas rajouter un double dans une box d'integer.
+
+#### Question 4
+
+1. 'setElement(capture<?>)' in 'esi.generics.Box' cannot be applied to '(java.lang.Integer)'
+   il refuse de prendre un integer à la ligne 12 car la box à été initialisée avec un joker,
+   Il faut donc que le types de l'argument passsé à setElement soit compatible avec tous les types.
+
+#### Question 5
+
+1. Les appels de compareTo ne sont pas reconnus car c'est une méthode de la superc lasse compare.
+
+#### Question 6
+
+Type parameter 'java.lang.Number' is not within its bound; should implement 'java.lang.Comparable<java.lang.Number>'
+Incompatible types. Found: 'esi.generics.Pair<java.lang.Integer>', required: 'esi.generics.Pair<java.lang.Number>'
+On attend exactement un Number et pas autre chose.
+
+#### Question 7
+
+1. 
+copy(List<Shape> d, List<Circle> s)
+copy2(List<Shape> d, List<Circle> s)//renvoie une erreur
+
+2. 
