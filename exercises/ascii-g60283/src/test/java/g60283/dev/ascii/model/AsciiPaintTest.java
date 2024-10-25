@@ -2,7 +2,6 @@ package g60283.dev.ascii.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +58,7 @@ public class AsciiPaintTest {
     @Test
     public void testSetColor() {
         paint.addRectangle(5, 5, 4, 2, '@');
-        paint.setColor(0, '&');  // Changing color of the first shape
+        paint.setColor(0, '&');
         char newColorAtUpperLeft = paint.getColorAt(5, 5);
         assertEquals('&', newColorAtUpperLeft);
     }
@@ -67,7 +66,7 @@ public class AsciiPaintTest {
     @Test
     public void testMoveShape() {
         paint.addRectangle(10, 10, 4, 2, '#');
-        paint.moveShape(0, 5, 5);  // Move rectangle by (5, 5)
+        paint.moveShape(0, 5, 5);
         char newColorAtNewPosition = paint.getColorAt(15, 15);
         assertEquals('#', newColorAtNewPosition);
     }
@@ -75,8 +74,8 @@ public class AsciiPaintTest {
     @Test
     public void testRemoveShape() {
         paint.addCircle(10, 5, 3, '*');
-        paint.removeShape(0);  // Remove the first (and only) shape
+        paint.removeShape(0);
         char colorAtCenter = paint.getColorAt(10, 5);
-        assertEquals(' ', colorAtCenter);  // Should be empty after removal
+        assertEquals(' ', colorAtCenter);
     }
 }

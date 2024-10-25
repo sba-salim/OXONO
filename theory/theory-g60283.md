@@ -458,4 +458,61 @@ On attend exactement un Number et pas autre chose.
 copy(List<Shape> d, List<Circle> s)
 copy2(List<Shape> d, List<Circle> s)//renvoie une erreur
 
+2.   sort(List<Circle> list, Comparator<Shape> c)
+
+
+## Lambdas
+
+#### Question 1
+
+1. List<Person> f = filter(myList, (Person p) -> {return p.getFirstname().startsWith("J");});
+2. List<Person> f = filter(myList, (Person p) -> {return p.getFirstname().startsWith("J") && p.getAge()<50;});
+
+#### Question 2
+
+1. Collections.sort(list, (word1, word2)-> word1.length()-word2.length());
 2. 
+
+## Interfaces graphiques - la librairie Javafx
+
+#### Question 1 
+
+1. ça modifie les dimensions de la fenêtre.
+2. ça change le style de fenêtre les contours et le menu en haut à droite n'aparaissent plus.
+   StageStyle.DECORATED - a stage with a solid white background and platform decorations.
+   StageStyle.UNDECORATED - a stage with a solid white background and no decorations.
+   StageStyle.TRANSPARENT - a stage with a transparent background and no decorations.
+   StageStyle.UTILITY - a stage with a solid white background and minimal platform decorations.
+3. Ca change la position du texte bottom le mettra en bas, top en haut, ...
+
+#### Question 2
+
+1. La check box 1 ne peut qu'être séléctionnée ou déséléctionnée, la 2 et initialisée comme indeterminée
+   et la 3 peut toujours avoir les  états.
+2. Les checkbox 1 et 3 se retrouvent respectivement sur le coin supérieur droit et gauche
+
+#### Question 3
+
+1. Les caractères entrés sont "cachésé sous forme de boule
+2. il y'a un affichage dans le bottom dus gridpane et on ne paut plus modifier le texte dans le textfield
+
+#### Question 4
+
+1. Le contenu de txaUserName sera affiché en console
+
+#### Question 5
+
+1. retourne la liste des noeuds enfants du parent.
+
+#### Question 6
+
+2. oui cela permet d'ajouter plusieurs noeuds enfants en une seule ligne.
+3. on peut ajouter un parent à la vbox avec les dimensions souhaitées et utiliser setclip(noeud parent)
+
+#### Question 7
+
+1. Les éléments se chevauchent et ne se voient pas correctement
+
+2. Le label password va se retrouver à l'extrémité droite de sa cellule
+
+3. La zone de texte rempli l'espace vide en largeur
