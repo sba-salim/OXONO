@@ -1,4 +1,4 @@
-package g60283.dev.meteo;
+package g60283.dev.meteo.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class WeatherAPI {
                 var firstResult = jsonArray.get(0);
                 String lat = firstResult.get("lat").asText();
                 String lon = firstResult.get("lon").asText();
-                return fetchWeatherData(lat, lon, date);
+                return fetchWeatherData(lat, lon, date, city);
             } else {
                 throw new WeatherException("No results found", null);
             }
@@ -37,7 +37,7 @@ public class WeatherAPI {
         }
     }
 
-    private static WeatherObject fetchWeatherData(String lat, String lon, String date) {
+    private static WeatherObject fetchWeatherData(String lat, String lon, String date, String city) {
         String meteoRequest = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon +
                 "&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe%2FBerlin&start_date=" + date + "&end_date=" + date;
         try {
@@ -55,7 +55,7 @@ public class WeatherAPI {
             double tempMin = jsonNode.get("daily").get("temperature_2m_min").get(0).asDouble();
             double tempMax = jsonNode.get("daily").get("temperature_2m_max").get(0).asDouble();
 
-            return new WeatherObject(tempMax, tempMin, weatherCode);
+            return new WeatherObject(tempMax, tempMin, weatherCode, city);
         } catch (IOException | InterruptedException e) {
             throw new WeatherException("Error during weather data retrieval", e);
         }
