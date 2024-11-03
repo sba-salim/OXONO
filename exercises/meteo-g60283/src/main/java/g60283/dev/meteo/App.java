@@ -135,10 +135,10 @@ public class App extends Application {
                 ObjectMapper objectMapper = new ObjectMapper();
                 var json = response.body(); // Get body of http response
                 var jsonNode = objectMapper.readTree(json);
-                var weatherCode = jsonNode.get("daily").get("weather_code").get(0).asInt();
-                var tempMin = jsonNode.get("daily")
+                int weatherCode = jsonNode.get("daily").get("weather_code").get(0).asInt();
+                double tempMin = jsonNode.get("daily")
                         .get("temperature_2m_min").get(0).asDouble();
-                var tempMax = jsonNode.get("daily")
+                double tempMax = jsonNode.get("daily")
                         .get("temperature_2m_max").get(0).asDouble();
                 maxTemp.setText(tempMax + "°");
                 minTemp.setText(tempMin + "°");
