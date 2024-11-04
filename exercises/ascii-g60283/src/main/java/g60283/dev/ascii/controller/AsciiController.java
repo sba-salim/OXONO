@@ -36,13 +36,16 @@ public class AsciiController {
             handleAddCircle(input);
         } else if (input.matches("add rectangle \\d+ \\d+ \\d+ \\d+ [a-zA-Z]")) {
             handleAddRectangle(input);
+        } else if (input.matches("add square \\d+ \\d+ \\d+ [a-zA-Z]")) {
+
         } else if (input.equals("show")) {
             handleShow();
         } else if (input.equals("list")) {
             handleList();
         } else if (input.matches("move \\d+ \\d+ \\d+")) {
             handleMoveShape(input);
-        } else if (input.matches("color \\d+ [a-zA-Z]")) {
+        }else if (input.matches("group(\\s+\\d+){2,}\\s*")) {
+        }else if (input.matches("color \\d+ [a-zA-Z]")) {
             handleSetColor(input);
         } else if (input.matches("delete \\d+")) {
             handleRemoveShape(input);
@@ -66,7 +69,18 @@ public class AsciiController {
             System.out.println("Cercle ajouté.");
         }
     }
-
+    private void handleAddSquare(String input){
+        Pattern pattern = Pattern.compile("add square (\\d+) (\\d+) (\\d+) ([a-zA-Z])");
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.find()) {
+            double x = Double.parseDouble(matcher.group(1));
+            double y = Double.parseDouble(matcher.group(2));
+            double side = Double.parseDouble(matcher.group(3));
+            char color = matcher.group(4).charAt(0);
+            paint.addSquare(x, y, side, color);
+            System.out.println("Carré ajouté.");
+        }
+    }
     private void handleAddRectangle(String input) {
         Pattern pattern = Pattern.compile("add rectangle (\\d+) (\\d+) (\\d+) (\\d+) ([a-zA-Z])");
         Matcher matcher = pattern.matcher(input);

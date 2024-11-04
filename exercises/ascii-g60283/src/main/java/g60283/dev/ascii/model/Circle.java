@@ -9,9 +9,17 @@ public class Circle extends ColoredShape{
         this.radius = radius;
     }
 
+    public double getRadius() {
+        return radius;
+    }
+
     @Override
     public void move(double dx, double dy) {
         center.move(dx, dy);
+    }
+
+    public Point getCenter() {
+        return new Point(center);
     }
 
     @Override
