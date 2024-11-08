@@ -21,7 +21,7 @@ public class Drawing {
    protected boolean remove(Shape shape) {
         return shapes.remove(shape);
    }
-   protected boolean remove(int index) {
+   protected boolean removeAtIndex(int index) {
         try {
             shapes.remove(index);
             return true;
