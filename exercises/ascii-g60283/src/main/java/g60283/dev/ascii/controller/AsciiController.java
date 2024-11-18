@@ -3,6 +3,8 @@ package g60283.dev.ascii.controller;
 import g60283.dev.ascii.model.AsciiPaint;
 import g60283.dev.ascii.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +16,7 @@ public class AsciiController {
     private boolean running;
 
     public AsciiController() {
-        this.paint = new AsciiPaint(40, 20); // Taille par défaut
+        this.paint = new AsciiPaint(40, 20);
         this.view = new View();
         this.running = true;
     }
@@ -32,12 +34,12 @@ public class AsciiController {
     }
 
     private void parseCommand(String input) {
-        if (input.matches("add circle \\d+ \\d+ \\d+ [a-zA-Z]")) {
+        if (input.matches("add circle \\d+ \\d+ \\d+ \\D")) {
             handleAddCircle(input);
-        } else if (input.matches("add rectangle \\d+ \\d+ \\d+ \\d+ [a-zA-Z]")) {
+        } else if (input.matches("add rectangle \\d+ \\d+ \\d+ \\d+ \\D")) {
             handleAddRectangle(input);
-        } else if (input.matches("add square \\d+ \\d+ \\d+ [a-zA-Z]")) {
-
+        } else if (input.matches("add square \\d+ \\d+ \\d+ \\D")) {
+            handleAddSquare(input);
         } else if (input.equals("show")) {
             handleShow();
         } else if (input.equals("list")) {
@@ -45,7 +47,8 @@ public class AsciiController {
         } else if (input.matches("move \\d+ \\d+ \\d+")) {
             handleMoveShape(input);
         }else if (input.matches("group(\\s+\\d+){2,}\\s*")) {
-        }else if (input.matches("color \\d+ [a-zA-Z]")) {
+            handleGroup(input);
+        }else if (input.matches("color \\d+ \\D")) {
             handleSetColor(input);
         } else if (input.matches("delete \\d+")) {
             handleRemoveShape(input);
@@ -69,6 +72,29 @@ public class AsciiController {
             System.out.println("Cercle ajouté.");
         }
     }
+    private void handleGroup(String input) {
+        Pattern pattern = Pattern.compile("group(\\s+\\d+){2,}\\s*");
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            // Liste pour stocker tous les nombres trouvés
+            List<Integer> numbers = new ArrayList<>();
+
+            // Pattern pour extraire chaque nombre
+            Pattern numberPattern = Pattern.compile("\\d+");
+            Matcher numberMatcher = numberPattern.matcher(input);
+
+            // Parcourir chaque nombre trouvé et l'ajouter à la liste
+            while (numberMatcher.find()) {
+                int number = Integer.parseInt(numberMatcher.group());
+                numbers.add(number-1);
+            }
+            paint.group(numbers);
+
+
+        }
+    }
+
     private void handleAddSquare(String input){
         Pattern pattern = Pattern.compile("add square (\\d+) (\\d+) (\\d+) ([a-zA-Z])");
         Matcher matcher = pattern.matcher(input);

@@ -1,9 +1,9 @@
 package g60283.dev.ascii.model;
 
-import java.util.List;
+import java.util.*;
 
 public class AsciiPaint {
-    private Drawing drawing;
+    private final Drawing drawing;
 
     public AsciiPaint() {
         this.drawing = new Drawing(20, 10);
@@ -30,6 +30,19 @@ public class AsciiPaint {
         Shape square = new Square(upperLeft, side, color);
         drawing.add(square);
     }
+    public void group(List<Integer> indexes) {
+        List<Shape> shapes = new ArrayList<>();
+        Collections.sort(indexes);
+        System.out.println(indexes.size());
+        for(int i : indexes) {
+            shapes.add(drawing.getShapeAt(i));
+        }
+        for (int i = indexes.size()-1; i>-1  ; i--) {
+            drawing.removeAtIndex(indexes.get(i));
+        }
+        Group group = new Group(shapes.getFirst().getColor());
+        drawing.add(group);
+    }
 
     public char getColorAt(int x, int y) {
         Point p = new Point(x,y);
@@ -51,7 +64,7 @@ public class AsciiPaint {
         drawing.getShapeAt(index).move(dx, dy);
     }
     public void removeShape(int index) {
-        drawing.remove(index);
+        drawing.removeAtIndex(index);
     }
     public List<Shape> getShapes() {
         return drawing.getShapes();
