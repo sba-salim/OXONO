@@ -44,14 +44,12 @@ public class Board {
 
     private List<Position> getNeighbors(Position position) {
         List<Position> neighbors = new ArrayList<>();
-
         // Directions of all possible neighbors
         int[][] directions = {{-1, 0}, // Up
                 {1, 0},  // Down
                 {0, -1}, // Left
                 {0, 1}   // Right
         };
-
         for (int[] direction : directions) {
 
             Position neighborPos = new Position(position.x() + direction[0], position.y() + direction[1]);
@@ -65,8 +63,9 @@ public class Board {
     }
 
     //todo corriger les param
-    void insertPawn(Position p, Symbol s) {
-//modif test
+    void insertPawn(Position pos, Pawn pawn) {
+        if (isValidInsert(pos,pawn.getS()))
+            grid[pos.x()][pos.y()]= pawn;
     }
 
     boolean isValidInsert(Position p, Symbol s) {
