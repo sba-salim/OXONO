@@ -1,7 +1,7 @@
 package model;
 
 public abstract class Token {
-    private Symbol s;
+    private final Symbol s;
     public Token(Symbol s) {
         this.s = s;
     }

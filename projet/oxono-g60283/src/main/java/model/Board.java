@@ -117,7 +117,7 @@ public class Board {
         return true; // The path is clear
     }
 
-    /*boolean isValidMove(Position p, Symbol s) {
+    /*boolean isVa  lidMove(Position p, Symbol s) {
         return isPathClear(p, s);
     }
     */
@@ -150,4 +150,77 @@ public class Board {
 
         return true; // The path is full of obstacles
     }
+    boolean checkLine(Position pos) {
+        Token t = grid[pos.x()][pos.y()];
+        if (!(t instanceof Pawn)) return false; // Ensure position contains a Pawn
+
+        Symbol symbol = t.getS();
+        Color color = ((Pawn) t).getC();
+
+        // Check left and right directions for symbol and color
+        return countConsecutive(pos, symbol, true) >= 4 ||
+                countConsecutive(pos, color, true) >= 4;
+    }
+
+
+
+    boolean checkColumn(Position pos) {
+        Token t = grid[pos.x()][pos.y()];
+        if (!(t instanceof Pawn)) return false; // Ensure position contains a Pawn
+
+        Symbol symbol = t.getS();
+        Color color = ((Pawn) t).getC();
+
+        // Check up and down directions for symbol and color
+        return countConsecutive(pos, symbol, false) >= 4 ||
+                countConsecutive(pos, color, false) >= 4;
+    }
+
+
+//todo: vérifier  que je ne sors pas du grid
+    int countConsecutive(Position pos, Object attribute, boolean horizontal) {
+        int count = 1; // Include the initial position
+        int x = pos.x();
+        int y = pos.y();
+
+        // Check left/up
+        for (int i = 1; i < 4; i++) {
+            int newX = horizontal ? x : x - i;
+            int newY = horizontal ? y - i : y;
+            if (!isInside(new Position(newX, newY)) || !matchesAttribute(new Position(newX, newY), attribute)) {
+                break;
+            }
+            count++;
+        }
+
+        // Check right/down
+        for (int i = 1; i < 4; i++) {
+            int newX = horizontal ? x : x + i;
+            int newY = horizontal ? y + i : y;
+            if (!isInside(new Position(newX, newY)) || !matchesAttribute(new Position(newX, newY), attribute)) {
+                break;
+            }
+            count++;
+        }
+
+        return count;
+    }
+
+    public boolean matchesAttribute(Position pos, Object attribute) {
+        if (!isInside(pos)) return false;
+
+        Token t = grid[pos.x()][pos.y()];
+        if (!(t instanceof Pawn)) return false;
+
+        if (attribute instanceof Symbol) {
+            return t.getS() == attribute;
+        } else if (attribute instanceof Color) {
+            return ((Pawn) t).getC() == attribute;
+        }
+        return false;
+    }
+    boolean checkWin(Position pos) {
+        return checkLine(pos) || checkColumn(pos);
+    }
+
 }
