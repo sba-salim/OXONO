@@ -44,6 +44,8 @@ public class Board {
 
     private List<Position> getNeighbors(Position position) {
         List<Position> neighbors = new ArrayList<>();
+        if (!isInside(position))
+            return neighbors;
         // Directions of all possible neighbors
         int[][] directions = {{-1, 0}, // Up
                 {1, 0},  // Down
@@ -62,10 +64,14 @@ public class Board {
         return neighbors;
     }
 
-    //todo corriger les param
     void insertPawn(Position pos, Pawn pawn) {
-        if (isValidInsert(pos,pawn.getS()))
-            grid[pos.x()][pos.y()]= pawn;
+        if (isValidInsert(pos, pawn.getS()))
+            grid[pos.x()][pos.y()] = pawn;
+        else if (isEnclaved(new Position(LastTouched.x(), LastTouched.y()))
+                && isEmpty(pos)
+                && grid[LastTouched.x()][LastTouched.y()].getS() == pawn.getS()) {
+            grid[pos.x()][pos.y()] = pawn;
+        }
     }
 
     boolean isValidInsert(Position p, Symbol s) {
@@ -117,13 +123,24 @@ public class Board {
         return true; // The path is clear
     }
 
-    /*boolean isVa  lidMove(Position p, Symbol s) {
+    /*boolean isValidMove(Position p, Symbol s) {
         return isPathClear(p, s);
     }
     */
     void moveTotem(Position p, Symbol s) {
         Position totemPos = s == Symbol.X ? PosX : PosO;
-        if (isInside(p) && isPathClear(p, s) || isEnclaved(totemPos) && isPathFull(p, totemPos)) {
+        if ((isInside(p) && isPathClear(p, s))
+                || (isEnclaved(totemPos) && isPathFull(p, totemPos))) //todo:corriger la condition pour vérifer qu'on écrase rien
+        {
+            grid[p.x()][p.y()] = grid[totemPos.x()][totemPos.y()];
+            grid[totemPos.x()][totemPos.y()] = null;
+            LastTouched = p;
+            if (s == Symbol.X)
+                PosX = p;
+            else PosO = p;
+        } else if (isEmpty(p) && isInside(p)
+                    && isRowFull(LastTouched.x())
+                    && isColumnFull(LastTouched.y())) {
             grid[p.x()][p.y()] = grid[totemPos.x()][totemPos.y()];
             grid[totemPos.x()][totemPos.y()] = null;
             LastTouched = p;
@@ -147,9 +164,10 @@ public class Board {
 
             current = new Position(current.x() + stepX, current.y() + stepY);
         }
-
+        //todo ajout
         return true; // The path is full of obstacles
     }
+
     boolean checkLine(Position pos) {
         Token t = grid[pos.x()][pos.y()];
         if (!(t instanceof Pawn)) return false; // Ensure position contains a Pawn
@@ -161,7 +179,6 @@ public class Board {
         return countConsecutive(pos, symbol, true) >= 4 ||
                 countConsecutive(pos, color, true) >= 4;
     }
-
 
 
     boolean checkColumn(Position pos) {
@@ -177,7 +194,7 @@ public class Board {
     }
 
 
-//todo: vérifier  que je ne sors pas du grid
+    //todo: vérifier  que je ne sors pas du grid
     int countConsecutive(Position pos, Object attribute, boolean horizontal) {
         int count = 1; // Include the initial position
         int x = pos.x();
@@ -219,8 +236,36 @@ public class Board {
         }
         return false;
     }
+
     boolean checkWin(Position pos) {
         return checkLine(pos) || checkColumn(pos);
     }
+
+    boolean isColumnFull(int col) {
+        if (col < 0 || col >= grid[0].length) {
+            throw new IllegalArgumentException("Numéro de colonne invalide.");
+        }
+
+        for (int row = 0; row < grid.length; row++) {
+            if (grid[row][col] == null) {
+                return false; // Une case vide est trouvée
+            }
+        }
+        return true; // Aucune case vide dans la colonne
+    }
+
+    boolean isRowFull(int row) {
+        if (row < 0 || row >= grid.length) {
+            throw new IllegalArgumentException("Numéro de ligne invalide.");
+        }
+
+        for (int col = 0; col < grid[row].length; col++) {
+            if (grid[row][col] == null) {
+                return false; // Une case vide est trouvée
+            }
+        }
+        return true; // Aucune case vide dans la ligne
+    }
+
 
 }
