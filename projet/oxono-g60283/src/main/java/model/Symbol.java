@@ -1,6 +1,6 @@
 package model;
 
 public enum Symbol {
-    X,O;
+    X,O
 }
 

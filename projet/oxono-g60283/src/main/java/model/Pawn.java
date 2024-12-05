@@ -1,7 +1,7 @@
 package model;
 
 public class Pawn extends Token {
-    private Color c;
+    private final Color c;
 
     public Color getC() {
         return c;

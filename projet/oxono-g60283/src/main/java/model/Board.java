@@ -64,14 +64,17 @@ public class Board {
         return neighbors;
     }
 
-    void insertPawn(Position pos, Pawn pawn) {
-        if (isValidInsert(pos, pawn.getS()))
+    boolean insertPawn(Position pos, Pawn pawn) {
+        if (isValidInsert(pos, pawn.getS())) {
             grid[pos.x()][pos.y()] = pawn;
-        else if (isEnclaved(new Position(LastTouched.x(), LastTouched.y()))
+            return true;
+        } else if (isEnclaved(new Position(LastTouched.x(), LastTouched.y()))
                 && isEmpty(pos)
                 && grid[LastTouched.x()][LastTouched.y()].getS() == pawn.getS()) {
             grid[pos.x()][pos.y()] = pawn;
+            return true;
         }
+        return false;
     }
 
     boolean isValidInsert(Position p, Symbol s) {
@@ -127,7 +130,7 @@ public class Board {
         return isPathClear(p, s);
     }
     */
-    void moveTotem(Position p, Symbol s) {
+    boolean moveTotem(Position p, Symbol s) {
         Position totemPos = s == Symbol.X ? PosX : PosO;
         if ((isInside(p) && isPathClear(p, s))
                 || (isEnclaved(totemPos) && isPathFull(p, totemPos))) //todo:corriger la condition pour vérifer qu'on écrase rien
@@ -138,16 +141,19 @@ public class Board {
             if (s == Symbol.X)
                 PosX = p;
             else PosO = p;
+            return true;
         } else if (isEmpty(p) && isInside(p)
-                    && isRowFull(LastTouched.x())
-                    && isColumnFull(LastTouched.y())) {
+                && isRowFull(totemPos.x())
+                && isColumnFull(totemPos.y())) {
             grid[p.x()][p.y()] = grid[totemPos.x()][totemPos.y()];
             grid[totemPos.x()][totemPos.y()] = null;
             LastTouched = p;
             if (s == Symbol.X)
                 PosX = p;
             else PosO = p;
+            return true;
         }
+        return false;
     }
 
     boolean isPathFull(Position p, Position totemPos) {//Checks there is no empty slot between the totem and p
@@ -243,7 +249,7 @@ public class Board {
 
     boolean isColumnFull(int col) {
         if (col < 0 || col >= grid[0].length) {
-            throw new IllegalArgumentException("Numéro de colonne invalide.");
+            //throw new IllegalArgumentException("Numéro de colonne invalide.");
         }
 
         for (int row = 0; row < grid.length; row++) {
@@ -256,7 +262,7 @@ public class Board {
 
     boolean isRowFull(int row) {
         if (row < 0 || row >= grid.length) {
-            throw new IllegalArgumentException("Numéro de ligne invalide.");
+            //throw new IllegalArgumentException("Numéro de ligne invalide.");
         }
 
         for (int col = 0; col < grid[row].length; col++) {
@@ -266,6 +272,11 @@ public class Board {
         }
         return true; // Aucune case vide dans la ligne
     }
-
+    public Symbol getLastTouchedSymbol() {
+        return grid[LastTouched.x()][LastTouched.y()].getS();
+    }
+    public Token getTokenAt(Position p) {
+        return grid[p.x()][p.y()];
+    }
 
 }

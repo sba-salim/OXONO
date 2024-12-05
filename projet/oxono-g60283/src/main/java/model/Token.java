@@ -5,7 +5,7 @@ public abstract class Token {
     public Token(Symbol s) {
         this.s = s;
     }
-    protected Symbol getS() {
+    public Symbol getS() {
         return s;
     }
 }

@@ -1,6 +1,6 @@
 package model;
 
 public enum Color {
-    PINK,BLACK;
+    PINK,BLACK
 }
 
