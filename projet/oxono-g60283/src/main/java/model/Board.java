@@ -26,7 +26,9 @@ public class Board {
         }
 
     }
-
+    public void removePawn(Position p) {
+        grid[p.x()][p.y()]= null;
+    }
 
     private boolean isInside(Position p) {
         return p.x() >= 0 && p.x() < grid.length && p.y() >= 0 && p.y() < grid[0].length;
@@ -64,7 +66,7 @@ public class Board {
         return neighbors;
     }
 
-    boolean insertPawn(Position pos, Pawn pawn) {
+    public boolean insertPawn(Position pos, Pawn pawn) {
         if (isValidInsert(pos, pawn.getS())) {
             grid[pos.x()][pos.y()] = pawn;
             return true;
@@ -130,7 +132,7 @@ public class Board {
         return isPathClear(p, s);
     }
     */
-    boolean moveTotem(Position p, Symbol s) {
+    public boolean moveTotem(Position p, Symbol s) {
         Position totemPos = s == Symbol.X ? PosX : PosO;
         if ((isInside(p) && isPathClear(p, s))
                 || (isEnclaved(totemPos) && isPathFull(p, totemPos))) //todo:corriger la condition pour vérifer qu'on écrase rien
@@ -210,7 +212,7 @@ public class Board {
         for (int i = 1; i < 4; i++) {
             int newX = horizontal ? x : x - i;
             int newY = horizontal ? y - i : y;
-            if (!isInside(new Position(newX, newY)) || !matchesAttribute(new Position(newX, newY), attribute)) {
+            if (!isInside(new Position(newX, newY)) || doesNotMatchAttribute(new Position(newX, newY), attribute)) {
                 break;
             }
             count++;
@@ -220,7 +222,7 @@ public class Board {
         for (int i = 1; i < 4; i++) {
             int newX = horizontal ? x : x + i;
             int newY = horizontal ? y + i : y;
-            if (!isInside(new Position(newX, newY)) || !matchesAttribute(new Position(newX, newY), attribute)) {
+            if (!isInside(new Position(newX, newY)) || doesNotMatchAttribute(new Position(newX, newY), attribute)) {
                 break;
             }
             count++;
@@ -229,18 +231,18 @@ public class Board {
         return count;
     }
 
-    public boolean matchesAttribute(Position pos, Object attribute) {
-        if (!isInside(pos)) return false;
+    public boolean doesNotMatchAttribute(Position pos, Object attribute) {
+        if (!isInside(pos)) return true;
 
         Token t = grid[pos.x()][pos.y()];
-        if (!(t instanceof Pawn)) return false;
+        if (!(t instanceof Pawn)) return true;
 
         if (attribute instanceof Symbol) {
-            return t.getS() == attribute;
+            return t.getS() != attribute;
         } else if (attribute instanceof Color) {
-            return ((Pawn) t).getC() == attribute;
+            return ((Pawn) t).getC() != attribute;
         }
-        return false;
+        return true;
     }
 
     boolean checkWin(Position pos) {
@@ -249,12 +251,12 @@ public class Board {
 
     boolean isColumnFull(int col) {
         if (col < 0 || col >= grid[0].length) {
-            //throw new IllegalArgumentException("Numéro de colonne invalide.");
+            throw new IllegalArgumentException("Numéro de colonne invalide.");
         }
 
-        for (int row = 0; row < grid.length; row++) {
-            if (grid[row][col] == null) {
-                return false; // Une case vide est trouvée
+        for (Token[] tokens : grid) {// pour chaque ligne du tableau 2D
+            if (tokens[col] == null) { //si le col iéme case de cette ligne est vide
+                return false; // Retourner false
             }
         }
         return true; // Aucune case vide dans la colonne
@@ -262,7 +264,7 @@ public class Board {
 
     boolean isRowFull(int row) {
         if (row < 0 || row >= grid.length) {
-            //throw new IllegalArgumentException("Numéro de ligne invalide.");
+            throw new IllegalArgumentException("Numéro de ligne invalide.");
         }
 
         for (int col = 0; col < grid[row].length; col++) {
@@ -275,8 +277,12 @@ public class Board {
     public Symbol getLastTouchedSymbol() {
         return grid[LastTouched.x()][LastTouched.y()].getS();
     }
+    public Position getTotemPos(Symbol s) {
+        return s==Symbol.X ? PosX : PosO;
+    }
     public Token getTokenAt(Position p) {
         return grid[p.x()][p.y()];
     }
+
 
 }

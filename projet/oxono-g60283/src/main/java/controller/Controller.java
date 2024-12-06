@@ -32,6 +32,10 @@ public class Controller implements Observer {
             handleQuit();
         } else if (input.matches("help")) {
             ConsoleView.displayHelp();
+        } else if (input.matches("undo")) {
+            game.undo();
+        } else if (input.matches("redo")) {
+            game.redo();
         } else {
             System.out.println("Unknown command! Type 'help' for a list of commands.");
         }

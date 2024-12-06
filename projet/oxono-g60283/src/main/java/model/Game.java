@@ -1,5 +1,7 @@
 package model;
 
+import model.command.CommandManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class Game implements Observable {
     private boolean hasToMove; // Indicates whether the current player must move a totem first
     private boolean gameOver;
     private final List<Observer> observers;
+    private final CommandManager cmdMgr;
 
     public Game() {
         this.board = new Board();
@@ -19,22 +22,26 @@ public class Game implements Observable {
         this.currentPlayer = pinkPlayer; // Pink player starts as per the rules
         this.hasToMove = true; // Player must move a totem at the beginning
         this.gameOver = false;
-        observers = new ArrayList<>();
+        this.observers = new ArrayList<>();
+        this.cmdMgr = new CommandManager();
 
     }
 
     // Toggle the current player
-    private void switchPlayer() {
+    public void switchPlayer() {
         currentPlayer = (currentPlayer == pinkPlayer) ? blackPlayer : pinkPlayer;
         hasToMove = true; // New player must move a totem
     }
 
     // Move a totem
     public boolean moveTotem(Position targetPosition, Symbol totemSymbol) {
+        Position sourcePosition = board.getTotemPos(totemSymbol);
         if (hasToMove
-                && board.moveTotem(targetPosition, totemSymbol)
-                && currentPlayer.hasPawn(totemSymbol)) {
-            hasToMove = false; // Moving a totem allows the player to insert a pawn
+                && currentPlayer.hasPawn(totemSymbol)
+                && board.moveTotem(targetPosition, totemSymbol)) {// Java évalue les méthodes de manière parresseuse,
+            // il n'y aura donc pas de move si l'une des deux premières conditions est fausse.
+            cmdMgr.addCommand(new MoveCommand(board, totemSymbol, targetPosition, sourcePosition));
+            hasToMove = false;// Moving a totem allows the player to insert a pawn
             notifyObservers();
             return true;
         }
@@ -58,9 +65,11 @@ public class Game implements Observable {
         }
         if (board.checkWin(position)) {
             gameOver = true;
+            cmdMgr.addCommand(new InsertCommand(board, currentPlayer, position, pawn));
             notifyObservers();
             return true;
         }
+        cmdMgr.addCommand(new InsertCommand(board, currentPlayer, position, pawn));
         hasToMove = true;
         this.switchPlayer();
         notifyObservers();
@@ -101,6 +110,20 @@ public class Game implements Observable {
 
     public Color getCurentPlayersColor() {
         return currentPlayer.getC();
+    }
+
+    public void undo() {
+        if (cmdMgr.canUndo()) {
+            cmdMgr.undo();
+            notifyObservers();
+        }
+    }
+
+    public void redo() {
+        if (cmdMgr.canRedo()) {
+            cmdMgr.redo();
+            notifyObservers();
+        }
     }
 
     public boolean draw() {
