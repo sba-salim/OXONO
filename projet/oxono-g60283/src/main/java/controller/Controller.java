@@ -1,26 +1,69 @@
 package controller;
 
-import model.Game;
-import model.Observer;
-import model.Position;
-import model.Symbol;
+import model.*;
 import view.ConsoleView;
 
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Controller implements Observer {
-    private final Game game;
-
-    public Controller() {
-        this.game = new Game();
-        game.registerObserver(this);
-    }
+    private Game game;
+    private final Scanner scanner = new Scanner(System.in);
 
     @Override
     public void update(Game game) {
         ConsoleView.update(game);
+    }
+
+    public void start() {
+        ConsoleView.displayWelcomeMessage();
+
+        int size = promptBoardSize(); // Lire la taille du plateau
+        boolean singlePlayer = promptGameMode(); // Lire le mode de jeu
+
+        // Initialiser le jeu
+        this.game = new Game(size, singlePlayer);
+        game.registerObserver(this);
+
+        // Boucle principale du jeu
+        while (!game.isGameOver()) {
+            try {
+                System.out.print("> ");
+                String input = scanner.nextLine();
+                parseCommand(input); // Analyse et exécute la commande
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
+    private int promptBoardSize() {
+        int size;
+        while (true) {
+            try {
+                System.out.print("Enter the board size (minimum 4): ");
+                size = Integer.parseInt(scanner.nextLine());
+                if (size >= 4 && size%2==0) {
+                    return size;
+                }
+                System.out.println("The size must be at least 4 and pair.");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
+    }
+
+    private boolean promptGameMode() {
+        while (true) {
+            System.out.print("Single player or two players? (Enter '1' for single player, '2' for two players): ");
+            String input = scanner.nextLine();
+            if (input.equals("1")) {
+                return true; // Mode un joueur
+            } else if (input.equals("2")) {
+                return false; // Mode deux joueurs
+            } else {
+                System.out.println("Invalid input. Please enter '1' or '2'.");
+            }
+        }
     }
 
     private void parseCommand(String input) {
@@ -40,23 +83,7 @@ public class Controller implements Observer {
             System.out.println("Unknown command! Type 'help' for a list of commands.");
         }
     }
-    public void start() {
-        ConsoleView.displayWelcomeMessage();
 
-        while (!game.isGameOver()) {
-            try {
-                System.out.print("> ");
-                Scanner scanner = new Scanner(System.in);
-                String input = scanner.nextLine();
-                parseCommand(input); // Analyse et exécute la commande
-            }catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-
-        }
-
-
-    }
     private void handleMove(String input) {
         String[] parts = input.split("\\s+");
         int x = Integer.parseInt(parts[1]);
@@ -70,8 +97,6 @@ public class Controller implements Observer {
         }
     }
 
-
-    // Méthode pour traiter une commande d'insertion de pion
     private void handleInsert(String input) {
         String[] parts = input.split("\\s+");
         int x = Integer.parseInt(parts[1]);
@@ -83,7 +108,6 @@ public class Controller implements Observer {
             System.out.println("Invalid pawn insertion.");
         }
     }
-
 
     private void handleQuit() {
         game.surrender();

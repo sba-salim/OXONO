@@ -1,6 +1,7 @@
 package model;
 
 import model.command.CommandManager;
+import model.strategy.Strategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +15,13 @@ public class Game implements Observable {
     private boolean gameOver;
     private final List<Observer> observers;
     private final CommandManager cmdMgr;
+    private Strategy strategy;
+
 
     public Game() {
         this.board = new Board();
-        this.pinkPlayer = new Player(Color.PINK);
-        this.blackPlayer = new Player(Color.BLACK);
+        this.pinkPlayer = new Player(Color.PINK, board.getSize() * board.getSize() - 4);
+        this.blackPlayer = new Player(Color.BLACK, board.getSize() * board.getSize() - 4);
         this.currentPlayer = pinkPlayer; // Pink player starts as per the rules
         this.hasToMove = true; // Player must move a totem at the beginning
         this.gameOver = false;
@@ -27,10 +30,26 @@ public class Game implements Observable {
 
     }
 
+    public Game(int size, boolean strategy) {
+        this.board = new Board(size);
+        this.pinkPlayer = new Player(Color.PINK, board.getSize() * board.getSize() - 4);
+        this.blackPlayer = new Player(Color.BLACK, board.getSize() * board.getSize() - 4);
+        this.currentPlayer = pinkPlayer; // Pink player starts as per the rules
+        this.hasToMove = true; // Player must move a totem at the beginning
+        this.gameOver = false;
+        this.observers = new ArrayList<>();
+        this.cmdMgr = new CommandManager();
+        if (strategy)
+            this.strategy = new RandomStrategy(this, blackPlayer, board);
+
+    }
+
     // Toggle the current player
-    public void switchPlayer() {
+    void switchPlayer() {
         currentPlayer = (currentPlayer == pinkPlayer) ? blackPlayer : pinkPlayer;
-        hasToMove = true; // New player must move a totem
+        if (strategy != null && currentPlayer == blackPlayer) {
+            strategy.execute();
+        }
     }
 
     // Move a totem
@@ -65,11 +84,11 @@ public class Game implements Observable {
         }
         if (board.checkWin(position)) {
             gameOver = true;
-            cmdMgr.addCommand(new InsertCommand(board, currentPlayer, position, pawn));
+            cmdMgr.addCommand(new InsertCommand(this, board, currentPlayer, position, pawn));
             notifyObservers();
             return true;
         }
-        cmdMgr.addCommand(new InsertCommand(board, currentPlayer, position, pawn));
+        cmdMgr.addCommand(new InsertCommand(this, board, currentPlayer, position, pawn));
         hasToMove = true;
         this.switchPlayer();
         notifyObservers();
@@ -115,6 +134,7 @@ public class Game implements Observable {
     public void undo() {
         if (cmdMgr.canUndo()) {
             cmdMgr.undo();
+            hasToMove = !hasToMove;
             notifyObservers();
         }
     }
@@ -122,6 +142,7 @@ public class Game implements Observable {
     public void redo() {
         if (cmdMgr.canRedo()) {
             cmdMgr.redo();
+            hasToMove = !hasToMove;
             notifyObservers();
         }
     }
@@ -133,4 +154,13 @@ public class Game implements Observable {
         }
         return false;
     }
+
+    public boolean hasToMove() {
+        return hasToMove;
+    }
+
+    public int getSize() {
+        return board.getSize();
+    }
+
 }

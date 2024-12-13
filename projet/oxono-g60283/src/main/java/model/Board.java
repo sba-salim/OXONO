@@ -26,11 +26,30 @@ public class Board {
         }
 
     }
+    public Board(int size) {
+        if(size<4 || size%2!=0)
+            throw new IllegalStateException("size must be pair and bigger than four.");
+        this.grid = new Token[size][size];
+        boolean placement = getRandomBool();
+        if (placement) {
+            this.PosX = new Position(size/2-1, size/2-1);
+            grid[size/2-1][size/2-1] = new Totem(Symbol.X);
+            this.PosO = new Position(size/2, size/2);
+            grid[size/2][size/2] = new Totem(Symbol.O);
+        } else {
+            this.PosX = new Position(size/2, size/2);
+            grid[size/2][size/2] = new Totem(Symbol.X);
+            this.PosO = new Position(size/2-1, size/2-1);
+            grid[size/2-1][size/2-1] = new Totem(Symbol.O);
+        }
+
+
+    }
     public void removePawn(Position p) {
         grid[p.x()][p.y()]= null;
     }
 
-    private boolean isInside(Position p) {
+    public boolean isInside(Position p) {
         return p.x() >= 0 && p.x() < grid.length && p.y() >= 0 && p.y() < grid[0].length;
     }
 
@@ -44,7 +63,8 @@ public class Board {
         return r.nextBoolean();//Génére un booleen aléatoire
     }
 
-    private List<Position> getNeighbors(Position position) {
+
+    List<Position> getNeighbors(Position position) {
         List<Position> neighbors = new ArrayList<>();
         if (!isInside(position))
             return neighbors;
@@ -278,11 +298,13 @@ public class Board {
         return grid[LastTouched.x()][LastTouched.y()].getS();
     }
     public Position getTotemPos(Symbol s) {
-        return s==Symbol.X ? PosX : PosO;
+        return s==Symbol.X ? new Position(PosX.x(), PosO.y()) : new Position(PosO.x(), PosO.y());
     }
     public Token getTokenAt(Position p) {
         return grid[p.x()][p.y()];
     }
-
+    public int getSize() {
+        return grid.length;
+    }
 
 }

@@ -53,13 +53,6 @@ public class CommandManager {
         }
     }
 
-    /**
-     * Clears the command history.
-     */
-    public void clearHistory() {
-        executedCommands.clear();
-        undoneCommands.clear();
-    }
 
     /**
      * Checks if undo operation is possible.

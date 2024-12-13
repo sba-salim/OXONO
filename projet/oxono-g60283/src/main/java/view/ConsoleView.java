@@ -11,8 +11,8 @@ public class ConsoleView {
     }
     public static void displayBoard(Game game) {
         System.out.println("Current Board:");
-        for (int x = 0; x < 6; x++) {
-            for (int y = 0; y < 6; y++) {
+        for (int x = 0; x < game.getSize(); x++) {
+            for (int y = 0; y < game.getSize(); y++) {
                 Token token = game.getTokenAt(new Position(x, y));
                 switch (token) {
                     case null -> System.out.print(" . "); // Case vide

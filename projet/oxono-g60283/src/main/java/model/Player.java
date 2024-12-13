@@ -7,10 +7,10 @@ public class Player {
     private final List<Pawn> hand;
     private final Color c;
 
-    public Player(Color c) {
+    public Player(Color c, int handSize) {
         this.c = c;
         this.hand = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < handSize/2; i++) {
             Pawn p = new Pawn(Symbol.X, c);
             hand.add(p);
             Pawn p2 = new Pawn(Symbol.O, c);
