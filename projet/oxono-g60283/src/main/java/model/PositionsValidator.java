@@ -17,7 +17,6 @@ public class PositionsValidator {
                     validPositions.add(candidate);
                 }
             }
-            System.out.println(validPositions);
 
             // Vérifier les positions dans la même colonne
             for (int row = 0; row < b.getSize(); row++) { // Supposons une grille 6x6

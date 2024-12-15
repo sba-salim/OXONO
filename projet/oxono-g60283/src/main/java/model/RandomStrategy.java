@@ -45,7 +45,6 @@ public class RandomStrategy implements Strategy {
         }
         // Insert a pawn
         List<Position> validInsertPositions = PositionsValidator.insertPositions(board);
-        System.out.println(validInsertPositions);
         if (!validInsertPositions.isEmpty()) {
             Position chosenPosition = validInsertPositions.get(random.nextInt(validInsertPositions.size()));
             game.insertPawn(chosenPosition);

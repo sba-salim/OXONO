@@ -1,20 +1,27 @@
 package controller;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
 import model.*;
 import view.ConsoleView;
+import view.MainWindow;
+import view.SettingsPanel;
 
 import java.util.Scanner;
 
-public class Controller implements Observer {
+public class Controller extends Application implements Observer {
     private Game game;
     private final Scanner scanner = new Scanner(System.in);
+    private MainWindow mainWindow;
+    private Position selectedTotem;
 
     @Override
     public void update(Game game) {
         ConsoleView.update(game);
+        mainWindow.updateView(game);
     }
 
-    public void start() {
+    public void startConsole() {
         ConsoleView.displayWelcomeMessage();
 
         int size = promptBoardSize(); // Lire la taille du plateau
@@ -42,7 +49,7 @@ public class Controller implements Observer {
             try {
                 System.out.print("Enter the board size (minimum 4): ");
                 size = Integer.parseInt(scanner.nextLine());
-                if (size >= 4 && size%2==0) {
+                if (size >= 4 && size % 2 == 0) {
                     return size;
                 }
                 System.out.println("The size must be at least 4 and pair.");
@@ -114,7 +121,35 @@ public class Controller implements Observer {
     }
 
     public static void main(String[] args) {
-        Controller c = new Controller();
-        c.start();
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        // Fenêtre de configuration initiale
+        SettingsPanel settingsPanel = new SettingsPanel(this);
+        settingsPanel.show(primaryStage);
+    }
+
+    public void setupGame(int size, boolean singlePlayer, Stage primaryStage) {
+        this.game = new Game(size, singlePlayer);
+        mainWindow = new MainWindow(primaryStage, this);
+        mainWindow.drawBoard(size);
+        game.registerObserver(this);
+    }
+
+    public void handleCellClick(int x, int y) {
+        if (game.hasToMove() && selectedTotem != null) {
+            boolean success = game.moveTotem(new Position(x, y), game.getTokenAt(selectedTotem).getS());
+            if (success) {
+                mainWindow.getStatusPanel().updateMessage("Totem moved to (" + x + ", " + y + ").");
+            } else {
+                mainWindow.getStatusPanel().updateMessage("Invalid move. Try again.");
+            }
+            selectedTotem = null; // Réinitialise la sélection
+        } else if (game.hasToMove() && game.getTokenAt(new Position(x, y)) instanceof Totem) {
+            selectedTotem = new Position(x, y);
+        } else if (!game.hasToMove())
+            game.insertPawn(new Position(x, y));
     }
 }

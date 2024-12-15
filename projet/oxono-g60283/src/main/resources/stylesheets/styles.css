@@ -1,0 +1,19 @@
+
+.grid-button {
+
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+    -fx-max-width: 50px;
+    -fx-max-height: 50px;
+
+    -fx-background-size: 50px 50px; /* Taille fixe pour les images */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.image {
+
+}
+

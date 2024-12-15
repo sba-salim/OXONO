@@ -90,6 +90,7 @@ public class Game implements Observable {
         }
         cmdMgr.addCommand(new InsertCommand(this, board, currentPlayer, position, pawn));
         hasToMove = true;
+        notifyObservers();
         this.switchPlayer();
         notifyObservers();
         return true;
