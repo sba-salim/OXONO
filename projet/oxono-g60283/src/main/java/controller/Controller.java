@@ -25,9 +25,10 @@ public class Controller extends Application implements Observer {
         if (restarting) return; // Ne rien faire pendant un redémarrage
 
         ConsoleView.update(game);
-        mainWindow.updateView(game);
+        if (mainWindow != null)
+            mainWindow.updateView(game);
 
-        if (game.isGameOver()) { // Vérifie si le jeu est terminé
+        if (game.isGameOver() && mainWindow != null) { // Vérifie si le jeu est terminé
             String winner = game.getCurrentPlayer().getC().toString();
             if (game.draw())
                 winner = "NOBODY";
