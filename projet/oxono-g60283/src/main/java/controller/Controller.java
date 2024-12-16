@@ -158,10 +158,7 @@ public class Controller extends Application implements Observer {
         game.surrender();
     }
 
-//    public static void main(String[] args) {
-//        Controller c = new Controller();
-//        c.startConsole();
-//    }
+
 
     @Override
     public void start(Stage primaryStage) {

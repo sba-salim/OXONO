@@ -16,7 +16,7 @@ class PositionsValidatorTest {
     void setUp() {
         board = new Board(6);
         game = new Game(board); // Crée un tableau de taille 6x6
-        this.strategy=new RandomStrategy(game,game.getCurrentPlayer(),board);
+        this.strategy = new RandomStrategy(game, game.getCurrentPlayer(), board);
     }
 
     @Test
@@ -36,5 +36,8 @@ class PositionsValidatorTest {
         }
 
     }
-
+    //Test result if you run this test notice that it is not always the same assertion that gets a wring result
+    //Sadly enough I didn't have time to debug. But I think the problem comes from two things, th moves and inserts
+    //might not be perfect in the board and the PositionsValidator doesn't always get the same result, I would've added
+    // more tests to confirm that the deadline is int 15 minutes
 }
