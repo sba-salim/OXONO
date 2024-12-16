@@ -16,8 +16,8 @@ public class ConsoleView {
                 Token token = game.getTokenAt(new Position(x, y));
                 switch (token) {
                     case null -> System.out.print(" . "); // Case vide
-                    case model.Totem totem -> System.out.print(token.getS() + "T "); // Totem
-                    case model.Pawn pawn -> System.out.print(token.getS() + "P "); // Pawn
+                    case model.Totem _ -> System.out.print(token.getS() + "T "); // Totem
+                    case model.Pawn _ -> System.out.print(token.getS() + "P "); // Pawn
                     default -> {
                     }
                 }
@@ -31,9 +31,7 @@ public class ConsoleView {
         System.out.println("Align 4 pawns of the same color or symbol to win!");
         System.out.println("Type 'help' for a list of commands.");
     }
-    public static void displayGameOver() {
 
-    }
     public static void displayHelp() {
         System.out.println("Available commands:");
         System.out.println("- move x y [X|O]: Move a totem to position (x, y) with symbol X or O.");

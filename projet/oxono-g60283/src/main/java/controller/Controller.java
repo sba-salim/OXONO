@@ -9,17 +9,32 @@ import view.SettingsPanel;
 
 import java.util.Scanner;
 
+import static view.GameAlert.showGameOverAlert;
+
 public class Controller extends Application implements Observer {
+    private boolean restarting = false;
+    private Stage primaryStage;
     private Game game;
     private final Scanner scanner = new Scanner(System.in);
     private MainWindow mainWindow;
     private Position selectedTotem;
 
+
     @Override
     public void update(Game game) {
+        if (restarting) return; // Ne rien faire pendant un redémarrage
+
         ConsoleView.update(game);
         mainWindow.updateView(game);
+
+        if (game.isGameOver()) { // Vérifie si le jeu est terminé
+            String winner = game.getCurrentPlayer().getC().toString();
+            if (game.draw())
+                winner = "NOBODY";
+            showGameOverAlert(winner, this::restartGame, () -> System.exit(0));
+        }
     }
+
 
     public void startConsole() {
         ConsoleView.displayWelcomeMessage();
@@ -116,16 +131,40 @@ public class Controller extends Application implements Observer {
         }
     }
 
-    private void handleQuit() {
+    public void restartGame() {
+        try {
+            restarting = true;
+            game.removeObserver(this);
+
+            if (primaryStage != null) {
+                primaryStage.close(); // Ferme la fenêtre actuelle
+            }
+
+            primaryStage = new Stage(); // Crée une nouvelle fenêtre
+            game = new Game(/* taille ou paramètres */); // Nouvelle instance du jeu
+            game.registerObserver(this); // Réenregistrer le contrôleur
+
+            start(primaryStage); // Relance l'application
+
+            restarting = false; // Terminé après la configuration
+        } catch (Exception e) {
+            System.out.println("Erreur : " + e.getMessage());
+        }
+    }
+
+
+    public void handleQuit() {
         game.surrender();
     }
 
     public static void main(String[] args) {
-        launch(args);
+        Controller c = new Controller();
+        c.startConsole();
     }
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         // Fenêtre de configuration initiale
         SettingsPanel settingsPanel = new SettingsPanel(this);
         settingsPanel.show(primaryStage);
@@ -137,6 +176,7 @@ public class Controller extends Application implements Observer {
         mainWindow.drawBoard(size);
         game.registerObserver(this);
     }
+
 
     public void handleCellClick(int x, int y) {
         if (game.hasToMove() && selectedTotem != null) {

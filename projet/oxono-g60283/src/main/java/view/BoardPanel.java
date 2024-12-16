@@ -4,7 +4,6 @@ import controller.Controller;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.control.Button;
 import model.*;
 
 public class BoardPanel extends GridPane {
@@ -13,6 +12,7 @@ public class BoardPanel extends GridPane {
     public BoardPanel(Controller controller) {
         this.controller = controller;
         this.setGridLinesVisible(true);
+        this.getStyleClass().add("grid");
     }
 
     public void drawBoard(int size) {
@@ -27,7 +27,7 @@ public class BoardPanel extends GridPane {
                 final int y = j;
 
                 // Quand le bouton est cliqué, appelez la méthode de gestion du clic
-                cell.setOnMouseClicked(e -> controller.handleCellClick(x, y));
+                cell.setOnMouseClicked(_ -> controller.handleCellClick(x, y));
 
                 // Ajoutez le bouton à la grille
                 this.add(cell, j, i);

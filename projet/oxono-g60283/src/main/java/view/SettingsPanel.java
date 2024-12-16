@@ -6,6 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import static view.GameAlert.showError;
+
 public class SettingsPanel {
     private final Controller controller;
 
@@ -28,7 +30,6 @@ public class SettingsPanel {
 
         root.getChildren().addAll(boardSizeLabel, boardSizeField, modeLabel, modeComboBox, startButton);
         Scene scene = new Scene(root, 400, 200);
-        scene.getStylesheets().add("stylesheets/styles.css");
         stage.setScene(scene);
         stage.setTitle("Game Settings");
         stage.show();
@@ -36,7 +37,7 @@ public class SettingsPanel {
 
     private Button getButton(Stage stage, TextField boardSizeField, ComboBox<String> modeComboBox) {
         Button startButton = new Button("Start Game");
-        startButton.setOnAction(e -> {
+        startButton.setOnAction(_-> {
             try {
                 int size = Integer.parseInt(boardSizeField.getText());
                 boolean singlePlayer = modeComboBox.getValue().equals("Single Player");
@@ -52,8 +53,5 @@ public class SettingsPanel {
         return startButton;
     }
 
-    private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, message);
-        alert.showAndWait();
-    }
+
 }

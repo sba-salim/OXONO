@@ -18,7 +18,22 @@ public class Player {
         }
 
     }
-
+    public int XPawns() {
+        int n =0;
+        for (Pawn pawn : hand) {
+            if (pawn.getS() == Symbol.X)
+                n++;
+        }
+        return n;
+    }
+    public int OPawns() {
+        int n =0;
+        for (Pawn pawn : hand) {
+            if (pawn.getS() == Symbol.O)
+                n++;
+        }
+        return n;
+    }
     public boolean hasPawn(Symbol s) {
         for (Pawn pawn : hand) {
             if (pawn.getS() == s) {
@@ -32,11 +47,11 @@ public class Player {
         return this.hand.isEmpty();
     }
 
-    public void addPawn(Pawn pawn) {
+    void addPawn(Pawn pawn) {
         hand.add(pawn);
     }
 
-    public Pawn removePawn(Symbol s) {
+    Pawn removePawn(Symbol s) {
         for (int i = 0; i < hand.size(); i++) {
             if (hand.get(i).getS() == s) {
                 return hand.remove(i);

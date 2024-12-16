@@ -35,7 +35,7 @@ public class RandomStrategy implements Strategy {
         if (game.hasToMove()) {
             // Move the totem
             List<Position> validMovePositions = PositionsValidator.movePositions(symbolToUse, board);
-
+            System.out.println("movepos : "+validMovePositions);
             if (!validMovePositions.isEmpty()) {
                 Position chosenPosition = validMovePositions.get(random.nextInt(validMovePositions.size()));
                 game.moveTotem(chosenPosition, symbolToUse);
@@ -45,6 +45,7 @@ public class RandomStrategy implements Strategy {
         }
         // Insert a pawn
         List<Position> validInsertPositions = PositionsValidator.insertPositions(board);
+        System.out.println("insertpos"+validInsertPositions);
         if (!validInsertPositions.isEmpty()) {
             Position chosenPosition = validInsertPositions.get(random.nextInt(validInsertPositions.size()));
             game.insertPawn(chosenPosition);

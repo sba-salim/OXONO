@@ -1,3 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+
+.window {
+-fx-background-color : purple;}
+.grid {
+    -fx-alignment : center;
+}
+.title {
+    -fx-font-family: 'Orbitron', sans-serif; /* Police futuriste */
+    -fx-font-size: 48px; /* Taille de la police */
+    -fx-text-fill: #0ff; /* Couleur néon cyan */
+    -fx-alignment: center; /* Centrer le texte */
+    -fx-padding: 10px; /* Ajouter de l'espace autour du texte */
+    -fx-background-color: transparent; /* Fond transparent */
+}
+.surrender-button {
+    -fx-background-color: #d9534f; /* Rouge vif pour attirer l'attention */
+    -fx-text-fill: white;          /* Texte blanc */
+    -fx-font-weight: bold;         /* Texte en gras */
+    -fx-padding: 10px 20px;        /* Espacement interne */
+    -fx-border-radius: 5px;        /* Coins arrondis */
+    -fx-background-radius: 5px;    /* Coins arrondis du fond */
+    -fx-cursor: hand;              /* Curseur pointer au survol */
+}
+
+.surrender-button:hover {
+    -fx-background-color: #c9302c; /* Rouge plus sombre au survol */
+}
+
 
 .grid-button {
 
@@ -7,13 +37,56 @@
     -fx-min-height: 50px;
     -fx-max-width: 50px;
     -fx-max-height: 50px;
-
+    -fx-border-color : pink;
+    -fx-background-color : purple;
     -fx-background-size: 50px 50px; /* Taille fixe pour les images */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
-.image {
+/* Global styling */
+.status-panel {
+    -fx-padding: 10px;               /* Ajoute du padding autour du panneau */
+    -fx-border-color: #ccc;         /* Ajoute une bordure grise */
+    -fx-border-width: 2px;          /* Épaisseur de la bordure */
+    -fx-border-radius: 5px;         /* Coins arrondis */
+    -fx-background-color: #f9f9f9;  /* Couleur de fond légèrement grise */
+    -fx-spacing: 15px;              /* Espacement entre les enfants */
+    -fx-alignment: center-left;     /* Alignement des éléments */
+}
 
+/* Stylisation générale pour les labels */
+.status-panel > .status-label,
+.status-panel > .current-player-label,
+.status-panel > .tokens-label,
+.status-panel > .empty-cells-label {
+    -fx-font-family: "Arial";       /* Police utilisée */
+    -fx-font-size: 14px;            /* Taille de la police */
+    -fx-text-fill: #333;            /* Couleur du texte */
+}
+
+/* Spécifique pour le label de bienvenue */
+.status-label {
+    -fx-font-weight: bold;          /* Texte en gras */
+    -fx-font-size: 16px;            /* Texte légèrement plus grand */
+    -fx-text-fill: #2a7cc3;         /* Couleur bleue */
+}
+
+/* Label pour le joueur actuel */
+.current-player-label {
+    -fx-font-size: 14px;            /* Taille standard */
+    -fx-font-weight: bold;          /* En gras pour distinction */
+    -fx-text-fill: #d9534f;         /* Couleur rouge vif */
+}
+
+/* Label pour les jetons restants */
+.tokens-label {
+    -fx-text-fill: #5cb85c;         /* Couleur verte */
+}
+
+/* Label pour les cases vides */
+.empty-cells-label {
+    -fx-text-fill: #f0ad4e;         /* Couleur orange */
+    -fx-font-style: italic;         /* Style italique */
 }
 

@@ -15,6 +15,11 @@ public class Game implements Observable {
     private boolean gameOver;
     private final List<Observer> observers;
     private final CommandManager cmdMgr;
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     private Strategy strategy;
 
 
@@ -46,7 +51,8 @@ public class Game implements Observable {
 
     // Toggle the current player
     void switchPlayer() {
-        currentPlayer = (currentPlayer == pinkPlayer) ? blackPlayer : pinkPlayer;
+        currentPlayer = (currentPlayer == pinkPlayer) ? blackPlayer : pinkPlayer;//change le currentPlayer
+        notifyObservers();
         if (strategy != null && currentPlayer == blackPlayer) {
             strategy.execute();
         }
@@ -99,7 +105,6 @@ public class Game implements Observable {
     public void surrender() {
         this.gameOver = true;
         switchPlayer();
-        notifyObservers();
     }
 
     public boolean isGameOver() {
@@ -163,5 +168,15 @@ public class Game implements Observable {
     public int getSize() {
         return board.getSize();
     }
-
+    public int emptyCells() {
+        int n = 0;
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j < board.getSize() ; j++) {
+                Position p = new Position(i,j);
+                if(board.isEmpty(p))
+                    n++;
+            }
+        }
+        return n;
+    }
 }
