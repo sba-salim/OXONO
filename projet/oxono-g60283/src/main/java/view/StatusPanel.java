@@ -47,11 +47,11 @@ public class StatusPanel {
 
     public void update(Game game) {
         // Mettre à jour le joueur actuel
-        currentPlayerLabel.setText("Current Player: " + game.getCurentPlayersColor());
+        currentPlayerLabel.setText("Current Player: " + game.getCurrentPlayersColor());
 
         // Mettre à jour le nombre de jetons restants pour le joueur actuel
-        int remainingXPawns = game.getCurrentPlayer().XPawns();
-        int remainingOPawns = game.getCurrentPlayer().OPawns();
+        int remainingXPawns = game.getCurrentPlayerXPawns();
+        int remainingOPawns = game.getCurrentPlayerOPawns();
         tokensLabel.setText("X : " + remainingXPawns + "\n" + "O : " + remainingOPawns);
 
 

@@ -29,7 +29,7 @@ public class Controller extends Application implements Observer {
             mainWindow.updateView(game);
 
         if (game.isGameOver() && mainWindow != null) { // Vérifie si le jeu est terminé
-            String winner = game.getCurrentPlayer().getC().toString();
+            String winner = game.getCurrentPlayersColor().toString();
             if (game.draw())
                 winner = "NOBODY";
             showGameOverAlert(winner, this::restartGame, () -> System.exit(0));
@@ -158,10 +158,10 @@ public class Controller extends Application implements Observer {
         game.surrender();
     }
 
-    public static void main(String[] args) {
-        Controller c = new Controller();
-        c.startConsole();
-    }
+//    public static void main(String[] args) {
+//        Controller c = new Controller();
+//        c.startConsole();
+//    }
 
     @Override
     public void start(Stage primaryStage) {

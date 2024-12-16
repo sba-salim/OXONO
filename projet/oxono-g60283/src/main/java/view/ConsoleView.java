@@ -24,7 +24,7 @@ public class ConsoleView {
             }
             System.out.println();
         }
-        System.out.println("Current player : " + game.getCurentPlayersColor());
+        System.out.println("Current player : " + game.getCurrentPlayersColor());
     }
     public static void displayWelcomeMessage() {
         System.out.println("Welcome to the OXONO Game!");
